@@ -86,17 +86,26 @@ def main():
             selected_model = st.radio('Select a model to use', model_names)
             if selected_model == 'Flan T5 small':
                 checkpoint = 'MBZUAI/LaMini-Flan-T5-77M'
-                tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=1000)
+                tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=summary_lengthh)
                 base_model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint, torch_dtype=torch.float32)
             elif selected_model == 'AGPT-2':
                 checkpoint = 'Ayham/albert_gpt2_Full_summarization_cnndm'
-                tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=1000)
+                tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=summary_length)
                 base_model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint, torch_dtype=torch.float32)
             elif selected_model == 'GPT-2':
                 checkpoint = 'MBZUAI/LaMini-GPT-124M'
-                tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=1000)
+                tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=summary_length)
                 base_model = AutoModelForCausalLM.from_pretrained(checkpoint, torch_dtype=torch.float32)
         with col2:
+            select_length = ['Short', 'Medium', 'Long']
+            selected_length = st.radio('Length of summary', select_length)
+            if selected_length == 'Short':
+                summary_length = 500
+            elif selected_length == 'Medium'L
+                summary_length = 750
+            elif selected_length == '1000':
+                summary_length = 1000
+        with col3:
             skipfirst = st.checkbox('Skip first page')
         if st.button('Summarize'):
             col1, col2 = st.columns(2)
