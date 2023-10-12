@@ -82,7 +82,6 @@ def main():
         st.subheader("Options")
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            summary_length = 750
             model_names = ["Flan T5 small", "Albert GPT-2", "LaMini GPT-2 124M"]
             selected_model = st.radio("Select a model to use", model_names)
             if selected_model == "Flan T5 small":
@@ -119,6 +118,7 @@ def main():
                     checkpoint, torch_dtype=torch.float32
                 )
         with col2:
+            summary_length = 750
             select_length = ["Short", "Medium", "Long"]
             selected_length = st.radio("Length of summary", select_length)
             if selected_length == "Short":
