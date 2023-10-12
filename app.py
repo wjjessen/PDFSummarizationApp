@@ -50,7 +50,7 @@ def llm_pipeline(tokenizer, base_model, filepath, skipfirst):
         "summarization",
         model=base_model,
         tokenizer=tokenizer,
-        max_length=500,
+        max_length=800,
         min_length=300,
         truncation=True,
     )
@@ -95,7 +95,7 @@ def main():
                 base_model = AutoModelForCausalLM.from_pretrained(
                     checkpoint, torch_dtype=torch.float32
                 )
-            else: # default Flan T5 small
+            else:  # default Flan T5 small
                 checkpoint = "MBZUAI/LaMini-Flan-T5-77M"
                 tokenizer = AutoTokenizer.from_pretrained(
                     checkpoint,
