@@ -130,7 +130,7 @@ def main():
             with col2:
                 st.info("PDF Summary")
                 with st.spinner("Please wait..."):
-                    summary = llm_pipeline(base_model, tokenizer, filepath, skipfirst)
+                    summary = llm_pipeline(tokenizer, base_model, filepath, skipfirst)
                 st.success(summary)
 
 
