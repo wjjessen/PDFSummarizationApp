@@ -1,33 +1,14 @@
+from transformers import pipeline
 import base64
 from langchain.chains.summarize import load_summarize_chain
+from langchain.docstore.document import Document
 from langchain.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from PyPDF2 import PdfReader
 import streamlit as st
 import torch
-from transformers import pipeline
-from PyPDF2 import PdfReader
-from langchain.docstore.document import Document
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM
 
-# from transformers import T5Tokenizer, T5ForConditionalGeneration
-
-# model and tokenizer
-# offload_folder = "offload"
-
-if selected_model == 'Flan T5 small':
-    checkpoint = 'MBZUAI/LaMini-Flan-T5-77M'
-elif model_names == 'GPT-2':
-    selected_model = 'MBZUAI/LaMini-GPT-124M'
-
-tokenizer = AutoTokenizer.from_pretrained(
-    checkpoint, truncation=True, legacy=False, model_max_length=1000
-)
-base_model = AutoModelForSeq2SeqLM.from_pretrained(
-    checkpoint,
-    #    device_map="auto",
-    torch_dtype=torch.float32,
-    #    offload_folder=offload_folder,
-)
 
 # notes
 # https://huggingface.co/docs/transformers/pad_truncation
@@ -64,18 +45,15 @@ def file_preprocessing(file, skipfirst):
 
 
 # llm pipeline
-def llm_pipeline(filepath, skipfirst):
+def llm_pipeline(base_model, tokenizer, filepath, skipfirst):
     pipe_sum = pipeline(
         'summarization',
         model=base_model,
         tokenizer=tokenizer,
-        max_length=1000,
+        max_length=500,
         min_length=300,
         truncation=True,
     )
-    # print("Default number of cpu threads: {}".format(torch.get_num_threads()))
-    # torch.set_num_threads(16)
-    # print("Modified number of cpu threads: {}".format(torch.get_num_threads()))
     input_text = file_preprocessing(filepath, skipfirst)
     result = pipe_sum(input_text)
     result = result[0]['summary_text']
@@ -101,9 +79,21 @@ def main():
     st.title('RASA: Research Article Summarization App')
     uploaded_file = st.file_uploader('Upload your PDF file', type=['pdf'])
     if uploaded_file is not None:
-        skipfirst = st.checkbox('Skip first page')
-        model_names = ['Flan T5 small','GPT-2']
-        selected_model = st.radio('Select a model to use', model_names)
+        st.subheader("Options")
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            model_names = ['Flan T5 small','GPT-2']
+            selected_model = st.radio('Select a model to use', model_names)
+            if selected_model == 'Flan T5 small':
+                checkpoint = 'MBZUAI/LaMini-Flan-T5-77M'
+                tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=1000)
+                base_model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint, torch_dtype=torch.float32)
+            elif selected_model == 'GPT-2':
+                checkpoint = 'MBZUAI/LaMini-GPT-124M'
+                tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=1000)
+                base_model = AutoModelForCausalLM.from_pretrained(checkpoint, torch_dtype=torch.float32)
+        with col2:
+            skipfirst = st.checkbox('Skip first page')
         if st.button('Summarize'):
             col1, col2 = st.columns(2)
             filepath = 'data/' + uploaded_file.name
@@ -115,7 +105,7 @@ def main():
             with col2:
                 st.info('PDF Summary')
                 with st.spinner('Please wait...'):
-                    summary = llm_pipeline(filepath, skipfirst)
+                    summary = llm_pipeline(base_model, tokenizer, filepath, skipfirst)
                 st.success(summary)
 
 
