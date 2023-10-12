@@ -7,27 +7,27 @@ import torch
 from transformers import pipeline
 from PyPDF2 import PdfReader
 from langchain.docstore.document import Document
+#from transformers import T5Tokenizer, T5ForConditionalGeneration
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 # model and tokenizer
 # offload_folder = "offload"
 
-from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 # text2textgen 990mb pytorch_model
 # fine-tuned version of google/flan-t5-base on LaMini-instruction dataset
 # that contains 2.58M samples for instruction fine-tuning.
 checkpoint = "MBZUAI/LaMini-Flan-T5-77M"
-tokenizer = T5Tokenizer.from_pretrained(
+tokenizer = AutoTokenizer.from_pretrained(
     checkpoint, truncation=True, legacy=False, model_max_length=1000
 )
-base_model = T5ForConditionalGeneration.from_pretrained(
+base_model = AutoModelForSeq2SeqLM.from_pretrained(
     checkpoint,
     #    device_map="auto",
     torch_dtype=torch.float32,
     #    offload_folder=offload_folder,
 )
 
-# from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 # summarization 1.63gb pytorch_model
 # BART is a transformer encoder-encoder (seq2seq) model with a bidirectional (BERT-like) encoder
