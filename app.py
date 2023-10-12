@@ -124,7 +124,7 @@ def main():
                 summary_length = 500
             elif selected_length == "Medium":
                 summary_length = 750
-            elif selected_length == "1000":
+            elif selected_length == "Long":
                 summary_length = 1000
         with col3:
             skipfirst = st.checkbox("Skip first page")
