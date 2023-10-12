@@ -16,7 +16,7 @@ from transformers import T5Tokenizer, T5ForConditionalGeneration
 # text2textgen 990mb pytorch_model
 # fine-tuned version of google/flan-t5-base on LaMini-instruction dataset
 # that contains 2.58M samples for instruction fine-tuning.
-checkpoint = "MBZUAI/LaMini-Flan-T5-248M"
+checkpoint = "MBZUAI/LaMini-Flan-T5-77M"
 tokenizer = T5Tokenizer.from_pretrained(
     checkpoint, truncation=True, legacy=False, model_max_length=1000
 )
