@@ -82,10 +82,14 @@ def main():
         st.subheader("Options")
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            model_names = ['Flan T5 small','GPT-2']
+            model_names = ['Flan T5 small', 'Albert GPT-2', 'LaMini GPT-2 124M']
             selected_model = st.radio('Select a model to use', model_names)
             if selected_model == 'Flan T5 small':
                 checkpoint = 'MBZUAI/LaMini-Flan-T5-77M'
+                tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=1000)
+                base_model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint, torch_dtype=torch.float32)
+            elif selected_model == 'AGPT-2':
+                checkpoint = 'Ayham/albert_gpt2_Full_summarization_cnndm'
                 tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=1000)
                 base_model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint, torch_dtype=torch.float32)
             elif selected_model == 'GPT-2':
