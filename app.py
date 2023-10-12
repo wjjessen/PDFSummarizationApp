@@ -7,16 +7,12 @@ import torch
 from transformers import pipeline
 from PyPDF2 import PdfReader
 from langchain.docstore.document import Document
-#from transformers import T5Tokenizer, T5ForConditionalGeneration
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+# from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 # model and tokenizer
 # offload_folder = "offload"
-
-
-# text2textgen 990mb pytorch_model
-# fine-tuned version of google/flan-t5-base on LaMini-instruction dataset
-# that contains 2.58M samples for instruction fine-tuning.
 checkpoint = "MBZUAI/LaMini-Flan-T5-77M"
 tokenizer = AutoTokenizer.from_pretrained(
     checkpoint, truncation=True, legacy=False, model_max_length=1000
@@ -28,34 +24,6 @@ base_model = AutoModelForSeq2SeqLM.from_pretrained(
     #    offload_folder=offload_folder,
 )
 
-
-# summarization 1.63gb pytorch_model
-# BART is a transformer encoder-encoder (seq2seq) model with a bidirectional (BERT-like) encoder
-# and an autoregressive (GPT-like) decoder. BART is pre-trained by (1) corrupting text with an
-# arbitrary noising function, and (2) learning a model to reconstruct the original text.
-# BART is particularly effective when fine-tuned for text generation (e.g. summarization,
-# translation) but also works well for comprehension tasks (e.g. text classification,
-# question answering). This particular checkpoint has been fine-tuned on CNN Daily Mail,
-# a large collection of text-summary pairs.
-# Evaluation results
-# ROUGE-1 on cnn_dailymail self-reported 42.949
-# ROUGE-2 on cnn_dailymail self-reported 20.815
-# ROUGE-L on cnn_dailymail self-reported 30.619
-# ROUGE-LSUM on cnn_dailymail self-reported 40.038
-# loss on cnn_dailymail self-reported 2.529
-# gen_len on cnn_dailymail self-reported 78.587
-# https://paperswithcode.com/sota/summarization-on-cnn-dailymail
-# checkpoint = "bart-large-cnn"
-# tokenizer = AutoTokenizer.from_pretrained(
-#    checkpoint, model_max_length=512, truncation=True, legacy=False
-# )
-# base_model = AutoModelForSeq2SeqLM.from_pretrained(
-#    checkpoint,
-#    #    device_map="auto",
-#    torch_dtype=torch.float32,
-#    offload_folder=offload_folder,
-# )
-
 # notes
 # https://huggingface.co/docs/transformers/pad_truncation
 
@@ -65,20 +33,20 @@ def file_preprocessing(file, skipfirst):
     loader = PyPDFLoader(file)
     pages = loader.load_and_split()
     print("")
-    print("# pages[0] ########################################################")
+    print("# pages[0] ##########")
     print("")
     print(pages[0])
     print("")
-    print("# pages ########################################################")
+    print("# pages ##########")
     print("")
     print(pages)
-    # if skipping the first page, then remove pages[0]
+    # if skipping the first page, remove pages[0]
     if skipfirst == 1:
         del pages[0]
     else:
         pages = pages
     print("")
-    print("# pages after loop ########################################################")
+    print("# pages after loop ##########")
     print("")
     print(pages)
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=50)
@@ -125,7 +93,7 @@ st.set_page_config(layout="wide")
 
 
 def main():
-    st.title("PDF Summarization")
+    st.title("RASA: Research Article Summarization App")
     uploaded_file = st.file_uploader("Upload your PDF file", type=["pdf"])
     if uploaded_file is not None:
         skipfirst = st.checkbox("Skip first page")
