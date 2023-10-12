@@ -9,7 +9,7 @@ from PyPDF2 import PdfReader
 from langchain.docstore.document import Document
 
 # model and tokenizer
-offload_folder = "offload"
+#offload_folder = "offload"
 
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
@@ -24,7 +24,7 @@ base_model = T5ForConditionalGeneration.from_pretrained(
     checkpoint,
     #    device_map="auto",
     torch_dtype=torch.float32,
-    offload_folder=offload_folder,
+#    offload_folder=offload_folder,
 )
 
 # from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
