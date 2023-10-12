@@ -86,7 +86,7 @@ def main():
             selected_model = st.radio('Select a model to use', model_names)
             if selected_model == 'Flan T5 small':
                 checkpoint = 'MBZUAI/LaMini-Flan-T5-77M'
-                tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=summary_lengthh)
+                tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, legacy=False, model_max_length=summary_length)
                 base_model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint, torch_dtype=torch.float32)
             elif selected_model == 'AGPT-2':
                 checkpoint = 'Ayham/albert_gpt2_Full_summarization_cnndm'
