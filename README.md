@@ -2,9 +2,11 @@
 
 ## Description
 
-This application summarizes an uploaded research article PDF using the large language model "LaMini-Flan-T5-77M. This model is a fine-tuned version of google/flan-t5-small on LaMini-instruction dataset that contains 2.58M samples for instruction fine-tuning.
+This application summarizes an uploaded research article PDF using the large language models "LaMini-Flan-T5-77M" or "LaMini-GPT-124M". LaMini-Flan-T5-77M is a fine-tuned version of google/flan-t5-small on LaMini-instruction dataset that contains 2.58M samples for instruction fine-tuning. LaMini-GPT-124M is a fine-tuned version of gpt2 on LaMini-instruction dataset that contains 2.58M samples for instruction fine-tuning.
 
 https://huggingface.co/MBZUAI/LaMini-Flan-T5-77M
+
+https://huggingface.co/MBZUAI/LaMini-GPT-124M
 
 ## Table of Contents
 
