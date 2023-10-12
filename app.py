@@ -14,9 +14,9 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 # model and tokenizer
 # offload_folder = "offload"
 
-if model_names = 'Flan T5 small':
+if model_names == 'Flan T5 small':
     checkpoint = 'MBZUAI/LaMini-Flan-T5-77M'
-else if model_names = 'GPT-2':
+else if model_names == 'GPT-2':
     checkpoint = 'MBZUAI/LaMini-GPT-124M'
 
 tokenizer = AutoTokenizer.from_pretrained(
