@@ -13,8 +13,12 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 # model and tokenizer
 # offload_folder = "offload"
-#checkpoint = "MBZUAI/LaMini-Flan-T5-77M"
-checkpoint = "MBZUAI/LaMini-GPT-124M"
+
+if model_names = 'Flan T5 small':
+    checkpoint = 'MBZUAI/LaMini-Flan-T5-77M'
+else if model_names = 'GPT-2':
+    checkpoint = 'MBZUAI/LaMini-GPT-124M'
+
 tokenizer = AutoTokenizer.from_pretrained(
     checkpoint, truncation=True, legacy=False, model_max_length=1000
 )
@@ -62,7 +66,7 @@ def file_preprocessing(file, skipfirst):
 # llm pipeline
 def llm_pipeline(filepath, skipfirst):
     pipe_sum = pipeline(
-        "summarization",
+        'summarization',
         model=base_model,
         tokenizer=tokenizer,
         max_length=1000,
@@ -74,14 +78,14 @@ def llm_pipeline(filepath, skipfirst):
     # print("Modified number of cpu threads: {}".format(torch.get_num_threads()))
     input_text = file_preprocessing(filepath, skipfirst)
     result = pipe_sum(input_text)
-    result = result[0]["summary_text"]
+    result = result[0]['summary_text']
     return result
 
 
 @st.cache_data
 # function to display the PDF
 def displayPDF(file):
-    with open(file, "rb") as f:
+    with open(file, 'rb') as f:
         base64_pdf = base64.b64encode(f.read()).decode("utf-8")
     # embed pdf in html
     pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="600" type="application/pdf"></iframe>'
@@ -90,28 +94,30 @@ def displayPDF(file):
 
 
 # streamlit code
-st.set_page_config(layout="wide")
+st.set_page_config(layout='wide')
 
 
 def main():
-    st.title("RASA: Research Article Summarization App")
-    uploaded_file = st.file_uploader("Upload your PDF file", type=["pdf"])
+    st.title('RASA: Research Article Summarization App')
+    uploaded_file = st.file_uploader('Upload your PDF file', type=['pdf'])
     if uploaded_file is not None:
-        skipfirst = st.checkbox("Skip first page")
-        if st.button("Summarize"):
+        skipfirst = st.checkbox('Skip first page')
+        model_names = ['Flan T5 small','GPT-2']
+        selected_model = st.radio('Select a model to use', model_names)
+        if st.button('Summarize'):
             col1, col2 = st.columns(2)
-            filepath = "data/" + uploaded_file.name
-            with open(filepath, "wb") as temp_file:
+            filepath = 'data/' + uploaded_file.name
+            with open(filepath, 'wb') as temp_file:
                 temp_file.write(uploaded_file.read())
             with col1:
-                st.info("Uploaded PDF")
+                st.info('Uploaded PDF')
                 pdf_viewer = displayPDF(filepath)
             with col2:
-                st.info("PDF Summary")
-                with st.spinner("Please wait..."):
+                st.info('PDF Summary')
+                with st.spinner('Please wait...'):
                     summary = llm_pipeline(filepath, skipfirst)
                 st.success(summary)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
