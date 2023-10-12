@@ -13,7 +13,8 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 # model and tokenizer
 # offload_folder = "offload"
-checkpoint = "MBZUAI/LaMini-Flan-T5-77M"
+#checkpoint = "MBZUAI/LaMini-Flan-T5-77M"
+checkpoint = "MBZUAI/LaMini-GPT-124M"
 tokenizer = AutoTokenizer.from_pretrained(
     checkpoint, truncation=True, legacy=False, model_max_length=1000
 )
