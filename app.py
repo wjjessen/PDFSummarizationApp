@@ -26,7 +26,7 @@ def file_preprocessing(file, skipfirst):
     print("# pages ##########")
     print("")
     print(pages)
-    # if skipping the first page, remove pages[0]
+    # if skipping the first page, remove pages[0]z
     if skipfirst == 1:
         del pages[0]
     else:
@@ -93,9 +93,9 @@ def main():
                     model_max_length=1000,
                 )
                 base_model = AutoModelForCausalLM.from_pretrained(
-                    checkpoint, torch_dtype=torch.float32
+                    checkpoint, torch_dtype=torch.float32, verify=False
                 )
-            else: # default Flan T5 small
+            else:  # default Flan T5 small
                 checkpoint = "MBZUAI/LaMini-Flan-T5-77M"
                 tokenizer = AutoTokenizer.from_pretrained(
                     checkpoint,
