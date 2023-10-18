@@ -15,7 +15,7 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausa
 
 
 # file loader and preprocessor
-def file_preprocessing(file, skipfirst):
+def file_preprocessing(file, skipfirst, skiplast):
     loader = PyPDFLoader(file)
     pages = loader.load_and_split()
     print("")
@@ -26,9 +26,14 @@ def file_preprocessing(file, skipfirst):
     print("# pages ##########")
     print("")
     print(pages)
-    # if skipping the first page, remove pages[0]z
-    if skipfirst == 1:
+    # skip page(s)
+    if (skipfirst == 1) & (skiplast == 0):
         del pages[0]
+    elif (skipfirst == 0) & (skiplast == 1):
+        del pages[-1]
+    elif (skipfirst == 1) & (skiplast == 1):
+        del pages[0]
+        del pages[-1]
     else:
         pages = pages
     print("")
@@ -45,7 +50,7 @@ def file_preprocessing(file, skipfirst):
 
 
 # llm pipeline
-def llm_pipeline(tokenizer, base_model, filepath, skipfirst):
+def llm_pipeline(tokenizer, base_model, filepath, skipfirst, skiplast):
     pipe_sum = pipeline(
         "summarization",
         model=base_model,
@@ -54,7 +59,7 @@ def llm_pipeline(tokenizer, base_model, filepath, skipfirst):
         min_length=300,
         truncation=True,
     )
-    input_text = file_preprocessing(filepath, skipfirst)
+    input_text = file_preprocessing(filepath, skipfirst, skiplast)
     result = pipe_sum(input_text)
     result = result[0]["summary_text"]
     return result
@@ -107,7 +112,9 @@ def main():
                     checkpoint, torch_dtype=torch.float32
                 )
         with col2:
+            st.write("Skip any pages?")
             skipfirst = st.checkbox("Skip first page")
+            skiplast = st.checkbox("Skip last page")
         if st.button("Summarize"):
             col1, col2 = st.columns(2)
             filepath = "data/" + uploaded_file.name
@@ -119,8 +126,22 @@ def main():
             with col2:
                 st.info("PDF Summary")
                 with st.spinner("Please wait..."):
-                    summary = llm_pipeline(tokenizer, base_model, filepath, skipfirst)
+                    summary = llm_pipeline(
+                        tokenizer, base_model, filepath, skipfirst, skiplast
+                    )
                 st.success(summary)
+
+
+st.markdown(
+    """<style>
+div[class*="stRadio"] > label > div[data-testid="stMarkdownContainer"] > p {
+    font-size: 1rem;
+    font-weight: 400;
+}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 
 if __name__ == "__main__":
