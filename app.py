@@ -87,7 +87,7 @@ def main():
         st.subheader("Options")
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            model_names = ["Flan T5 small", "LaMini GPT-2 124M"]
+            model_names = ["Flan T5 small", "LaMini GPT-2 124M", "Fine-Tuned T5 Small for Text Summarization"]
             selected_model = st.radio("Select a model to use", model_names)
             if selected_model == "LaMini GPT-2 124M":
                 checkpoint = "MBZUAI/LaMini-GPT-124M"
@@ -98,7 +98,18 @@ def main():
                     model_max_length=1000,
                 )
                 base_model = AutoModelForCausalLM.from_pretrained(
-                    checkpoint, torch_dtype=torch.float32, verify=False
+                    checkpoint, torch_dtype=torch.float32
+                )
+            elif selected_model = "Fine-Tuned T5 Small for Text Summarization":
+                checkpoint = "Falconsai/text_summarization"
+                tokenizer = AutoTokenizer.from_pretrained(
+                    checkpoint,
+                    truncation=True,
+                    legacy=False,
+                    model_max_length=1000,
+                )
+                base_model = AutoModelForSeq2SeqLM.from_pretrained(
+                    checkpoint, torch_dtype=torch.float32
                 )
             else:  # default Flan T5 small
                 checkpoint = "MBZUAI/LaMini-Flan-T5-77M"
