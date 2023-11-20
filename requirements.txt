@@ -2,7 +2,7 @@ langchain
 sentence_transformers
 torch
 sentencepiece
-transformers
+transformers==4.34.0
 accelerate
 chromadb
 pypdf
