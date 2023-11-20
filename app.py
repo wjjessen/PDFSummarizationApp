@@ -8,7 +8,6 @@ from PyPDF2 import PdfReader
 import streamlit as st
 import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM
-import time
 
 # notes
 # https://huggingface.co/docs/transformers/pad_truncation
