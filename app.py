@@ -135,7 +135,7 @@ def main():
             skipfirst = st.checkbox("Skip first page")
             skiplast = st.checkbox("Skip last page")
         with col3:
-            st.write("Background information (opens in a new window)")
+            st.write("Background information (links open in a new window)")
             st.write(
                 "Model class: [BART](https://huggingface.co/docs/transformers/main/en/model_doc/bart)"
                 "&nbsp;&nbsp;|&nbsp;&nbsp;Specific model: [MBZUAI/LaMini-Flan-T5-77M](https://huggingface.co/MBZUAI/LaMini-Flan-T5-77M)"
