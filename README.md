@@ -2,11 +2,11 @@
 
 ## Description
 
-This application summarizes an uploaded research article PDF using the large language models "LaMini-Flan-T5-77M" or "LaMini-GPT-124M". LaMini-Flan-T5-77M is a fine-tuned version of google/flan-t5-small on LaMini-instruction dataset that contains 2.58M samples for instruction fine-tuning. LaMini-GPT-124M is a fine-tuned version of gpt2 on LaMini-instruction dataset that contains 2.58M samples for instruction fine-tuning.
+This application summarizes an uploaded research article PDF using the large language models "LaMini-Flan-T5-77M" or "lsg-bart-base-16384-pubmed". LaMini-Flan-T5-77M is a fine-tuned version of google/flan-t5-small on LaMini-instruction dataset that contains 2.58M samples for instruction fine-tuning. lsg-bart-base-16384-pubmed is a fine-tuned version of ccdv/lsg-bart-base-4096-pubmed on the scientific_papers pubmed dataset. 
 
 https://huggingface.co/MBZUAI/LaMini-Flan-T5-77M
 
-https://huggingface.co/MBZUAI/LaMini-GPT-124M
+https://huggingface.co/ccdv/lsg-bart-base-16384-pubmed
 
 ## Table of Contents
 
