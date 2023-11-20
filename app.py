@@ -163,7 +163,7 @@ def main():
                 pdf_viewer = displayPDF(filepath)
             with col2:
                 with st.spinner("Downloading LLM..."):
-                    time.sleep(5)
+                    sleep(5)
                 with st.spinner("Summarizing..."):
                     summary = llm_pipeline(tokenizer, base_model, input_text)
                     postproc_text_length = postproc_count(summary)
