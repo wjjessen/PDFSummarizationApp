@@ -152,19 +152,21 @@ def main():
             with open(filepath, "wb") as temp_file:
                 temp_file.write(uploaded_file.read())
             with col1:
-                input_text, text_length = preproc_count(filepath, skipfirst, skiplast)
+                input_text, preproc_text_length = preproc_count(
+                    filepath, skipfirst, skiplast
+                )
                 st.info(
                     "Uploaded PDF&nbsp;&nbsp;|&nbsp;&nbsp;Number of words: "
-                    f"{text_length:,}"
+                    f"{preproc_text_length:,}"
                 )
                 pdf_viewer = displayPDF(filepath)
             with col2:
                 with st.spinner("Please wait..."):
                     summary = llm_pipeline(tokenizer, base_model, input_text)
-                    text_length = postproc_count(summary)
+                    postproc_text_length = postproc_count(summary)
                 st.info(
                     "PDF Summary&nbsp;&nbsp;|&nbsp;&nbsp;Number of words: "
-                    f"{text_length:,}"
+                    f"{postproc_text_length:,}"
                 )
                 st.success(summary)
 
