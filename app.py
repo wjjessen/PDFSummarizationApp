@@ -57,13 +57,13 @@ def file_preprocessing(file, skipfirst, skiplast):
 def preproc_count(filepath, skipfirst, skiplast):
     input_text = file_preprocessing(filepath, skipfirst, skiplast)
     text_length = len(input_text)
-    print("Preproc input word count:%s" % (text_length))
+    print("Preproc input word count: %s" % (text_length))
     return input_text, text_length
 
 
 def postproc_count(summary):
     text_length = len(summary)
-    print("Postproc summary word count:%s" % (text_length))
+    print("Postproc summary word count: %s" % (text_length))
     return text_length
 
 
@@ -77,12 +77,13 @@ def llm_pipeline(tokenizer, base_model, input_text):
         min_length=300,
         truncation=True,
     )
+    print("Summarizing...")
     result = pipe_sum(input_text)
     result = result[0]["summary_text"]
     return result
 
 
-@st.cache_data
+@st.cache_data(ttl=60 * 60)
 # function to display the PDF
 def displayPDF(file):
     with open(file, "rb") as f:
