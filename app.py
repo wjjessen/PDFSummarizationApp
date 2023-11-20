@@ -57,11 +57,13 @@ def file_preprocessing(file, skipfirst, skiplast):
 def preproc_count(filepath, skipfirst, skiplast):
     input_text = file_preprocessing(filepath, skipfirst, skiplast)
     text_length = len(input_text)
+    print("Preproc input word count:%s" % (text_length))
     return input_text, text_length
 
 
 def postproc_count(summary):
     text_length = len(summary)
+    print("Postproc summary word count:%s" % (text_length))
     return text_length
 
 
