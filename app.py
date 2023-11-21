@@ -6,9 +6,10 @@ from langchain.document_loaders.pdf import PyMuPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from PyPDF2 import PdfReader
 import streamlit as st
+import textwrap as tw
+import time
 import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForCausalLM
-from time import sleep
 
 # notes
 # https://huggingface.co/docs/transformers/pad_truncation
@@ -120,7 +121,9 @@ def main():
                     trust_remote_code=True,
                 )
                 base_model = AutoModelForSeq2SeqLM.from_pretrained(
-                    checkpoint, torch_dtype=torch.float32, trust_remote_code=True
+                    checkpoint,
+                    torch_dtype=torch.float32,
+                    trust_remote_code=True,
                 )
             else:  # default Flan T5 small
                 checkpoint = "MBZUAI/LaMini-Flan-T5-77M"
@@ -163,15 +166,20 @@ def main():
                 pdf_viewer = displayPDF(filepath)
             with col2:
                 with st.spinner("Downloading LLM..."):
-                    sleep(5)
+                    time.sleep(5)
+                start = time.time()
                 with st.spinner("Summarizing..."):
                     summary = llm_pipeline(tokenizer, base_model, input_text)
                     postproc_text_length = postproc_count(summary)
+                end = time.time()
+                duration = end - start
                 st.info(
                     "PDF Summary&nbsp;&nbsp;|&nbsp;&nbsp;Number of words: "
                     f"{postproc_text_length:,}"
+                    + "&nbsp;&nbsp;|&nbsp;&nbsp;Summarization time: "
+                    f"{duration:.0f}" + " seconds"
                 )
-                st.success(summary)
+                st.code("\n".join(tw.wrap(summary, width=80)), language="md")
 
 
 st.markdown(
