@@ -179,7 +179,8 @@ def main():
                     + "&nbsp;&nbsp;|&nbsp;&nbsp;Summarization time: "
                     f"{duration:.0f}" + " seconds"
                 )
-                st.code("\n".join(tw.wrap(summary, width=80)), language="md")
+                # st.code("\n".join(tw.wrap(summary, width=80)), language="md")
+                st.success(summary)
 
 
 st.markdown(
